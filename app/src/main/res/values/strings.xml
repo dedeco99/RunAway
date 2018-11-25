@@ -2,6 +2,8 @@
     <string name="app_name">RunAway</string>
     <string name="google_maps_api_key">AIzaSyAypSYGSyONz9vrPdqgDMDMkdeWI7-2ETQ</string>
 
+    <string name="title_login">Login</string>
+    <string name="title_register">Register</string>
     <string name="title_map">Map</string>
     <string name="title_full_map">Route Map</string>
     <string name="title_stats">Stats and Goals</string>
