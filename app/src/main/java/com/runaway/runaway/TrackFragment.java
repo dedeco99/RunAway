@@ -21,7 +21,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+
 public class TrackFragment extends Fragment {
+    private View view;
     private Context context;
     private TextView timeValue;
     private TextView distanceValue;
@@ -33,7 +36,7 @@ public class TrackFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_track, null);
+        view=inflater.inflate(R.layout.fragment_track, null);
         context=this.getContext();
 
         timeValue = view.findViewById(R.id.timeValue);
@@ -59,10 +62,11 @@ public class TrackFragment extends Fragment {
 
         try {
             jsonBody.put("time", timeValue.getText());
-            jsonBody.put("distance",  Integer.parseInt(distanceValue.getText().subSequence(0,distanceValue.getText().length()-2).toString()));
-            jsonBody.put("altitude",  Integer.parseInt(altitudeValue.getText().toString()));
-            jsonBody.put("steps",  Integer.parseInt(stepsValue.getText().toString()));
-            jsonBody.put("speed",  Integer.parseInt(speedValue.getText().toString()));
+            jsonBody.put("distance", Integer.parseInt(distanceValue.getText().subSequence(0,distanceValue.getText().length()-2).toString()));
+            jsonBody.put("altitude", Integer.parseInt(altitudeValue.getText().toString()));
+            jsonBody.put("steps", Integer.parseInt(stepsValue.getText().toString()));
+            jsonBody.put("speed", Integer.parseInt(speedValue.getText().toString()));
+            jsonBody.put("created",new Date());
         } catch (JSONException e) {
             e.printStackTrace();
         }
