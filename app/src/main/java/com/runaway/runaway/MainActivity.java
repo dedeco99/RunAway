@@ -1,5 +1,6 @@
 package com.runaway.runaway;
 
+import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,9 +12,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 public class MainActivity extends AppCompatActivity {
-
+    private static final int GOOGLE_SERVICES_ERROR_REQUEST=9001;
     private Toolbar toolbar;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -94,5 +99,27 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     }
+
+
+
+    public boolean isGoogleServicesUpdated(){
+        int updated=GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
+
+        if(updated==ConnectionResult.SUCCESS){
+            return true;
+        }
+
+        else if(GoogleApiAvailability.getInstance().isUserResolvableError(updated)){
+            Dialog dialog=GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this,updated,GOOGLE_SERVICES_ERROR_REQUEST);
+            dialog.show();
+        }
+
+        else{
+            Toast.makeText(this, "Can´t make map requests", Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
+
+
 
 }

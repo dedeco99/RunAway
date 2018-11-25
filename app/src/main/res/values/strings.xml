@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">RunAway</string>
+    <string name="google_maps_api_key">AIzaSyAypSYGSyONz9vrPdqgDMDMkdeWI7-2ETQ</string>
 
     <string name="title_map">Map</string>
     <string name="title_full_map">Route Map</string>
@@ -18,4 +19,22 @@
     <string name="title_stats_speed">Speed</string>
     <string name="title_stats_steps">Steps</string>
     <string name="title_stats_activetime">Active Time</string>
+
+    <string name="spinner_routes">Routes</string>
+
+    <string name="internet_connection_required">Internet connection required</string>
+    <string name="connect_to_internet">Connect to internet?</string>
+
+    <string name="gps_service_required">Gps service required</string>
+    <string name="turn_on_gps">Turn on Gps?</string>
+
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string-array name="map_routes">
+
+        <item>Select Route</item>
+        <item>Caminho Atum</item>
+        <item>Caminho Sabão</item>
+
+    </string-array>
 </resources>
