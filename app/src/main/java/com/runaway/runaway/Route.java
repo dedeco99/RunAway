@@ -48,6 +48,7 @@ public class Route {
      */
     public int getRouteDistance(){
         double result=0;
+        if(dots.size()<=1) return 0;
         //dots.size()-1 so the array does'nt calculate between end dot and null
         //dots.get(i+1) next dot
         for(int i=0;i<dots.size()-1;i++){
