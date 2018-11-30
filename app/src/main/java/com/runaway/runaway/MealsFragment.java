@@ -69,10 +69,10 @@ public class MealsFragment extends Fragment {
         String toSet=String.valueOf(calories.intValue())+" of "+String.valueOf(totalCalories.intValue())+" calories";
         caloriesValue.setText(toSet);
 
-        FloatingActionButton addFoodButton = view.findViewById(R.id.addFoodButton);
-        addFoodButton.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton addMealButton = view.findViewById(R.id.addMealButton);
+        addMealButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v){
-                Intent intent = new Intent(getContext(), MealsAddFoodActivity.class);
+                Intent intent = new Intent(getContext(), MealsAddActivity.class);
                 startActivity(intent);
             }
         });
