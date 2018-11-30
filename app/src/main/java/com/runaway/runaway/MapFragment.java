@@ -13,6 +13,7 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -20,7 +21,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -30,11 +35,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
-public class MapFragment extends Fragment implements AdapterView.OnItemSelectedListener, OnMapReadyCallback, LocationSource.OnLocationChangedListener {
+public class MapFragment extends Fragment implements AdapterView.OnItemSelectedListener, OnMapReadyCallback {
     private static final String[] PERMISSIONS=new String[]{
             Manifest.permission.INTERNET,
             Manifest.permission.ACCESS_COARSE_LOCATION,
@@ -44,7 +52,6 @@ public class MapFragment extends Fragment implements AdapterView.OnItemSelectedL
     };
     private static final float ZOOM=14.20f;
 
-    private LocationManager locationManager;
     private GoogleMap map;
 
     private MarkerOptions myMarker;
@@ -55,24 +62,39 @@ public class MapFragment extends Fragment implements AdapterView.OnItemSelectedL
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_map,container,false);
-        Spinner spinner=(Spinner)view.findViewById(R.id.maps_spinner);
 
-        askPermissions();
-        checkInternet();
-        checkGPS();
-        fillRoutesMap();
-        initializeMap();
+        //permissions check and request
+        if(getPermissionsMissing(PERMISSIONS).length>0){
+            askPermissions();
+            return reloadView(R.string.permissions_reload);
+        }
 
-        //create ArrayAdapter<String>
-        //add Title and routes
-        final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item);
-        adapter.add(getString(R.string.spinner_routes));
-        adapter.addAll(routes.keySet());
+        //internet on check and request
+        ConnectivityManager cm=(ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(cm.getActiveNetworkInfo()==null){
+            checkInternet();
+            return reloadView(R.string.internet_reload);
+        }
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setPrompt(getString(R.string.spinner_routes));
-        spinner.setAdapter(adapter);
-        spinner.setOnItemSelectedListener(this);
+        //gps on check and request
+        LocationManager locationManager=(LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
+        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+            checkGPS();
+            return reloadView(R.string.gps_reload);
+        }
+        
+           Spinner spinner=(Spinner)view.findViewById(R.id.maps_spinner);
+           fillRoutesMap();
+           initializeMap();
+
+           final ArrayAdapter<String> adapter = new ArrayAdapter<String>(this.getContext(), android.R.layout.simple_spinner_item);
+           adapter.add(getString(R.string.spinner_routes));
+           adapter.addAll(routes.keySet());
+
+           adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+           spinner.setPrompt(getString(R.string.spinner_routes));
+           spinner.setAdapter(adapter);
+           spinner.setOnItemSelectedListener(this);
 
         return view;
     }
@@ -100,58 +122,59 @@ public class MapFragment extends Fragment implements AdapterView.OnItemSelectedL
      * If user does'nt have internet requests to connect
      */
     private void checkInternet(){
-        ConnectivityManager cm=(ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-       if(cm.getActiveNetworkInfo()==null){
-           AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.LightDialogTheme);
-           builder.setMessage(getString(R.string.connect_to_internet))
-                   .setCancelable(false)
 
-                   .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                       @Override
-                       public void onClick(DialogInterface dialog, int id) {
-                           startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-                       }
-                   })
+                ConnectivityManager cm=(ConnectivityManager)getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+                if(cm.getActiveNetworkInfo()==null){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.LightDialogTheme);
+                    builder.setMessage(getString(R.string.connect_to_internet))
+                            .setCancelable(false)
 
-                   .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-                       @Override
-                       public void onClick(DialogInterface dialog, int id){
-                           getActivity().finish();
-                       }
-                   });
+                            .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int id) {
+                                    startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+                                }
+                            })
 
-           AlertDialog alert = builder.create();
-           alert.setTitle(getString(R.string.internet_connection_required));
-           alert.show();
-       }
-    }
+                            .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int id){
+                                    getActivity().finish();
+                                }
+                            });
+
+                    AlertDialog alert = builder.create();
+                    alert.setTitle(getString(R.string.internet_connection_required));
+                    alert.show();
+            }
+        }
 
     private void checkGPS(){
-        locationManager=(LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
-        if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager==null){
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.LightDialogTheme);
-            builder.setMessage(getString(R.string.turn_on_gps))
-                    .setCancelable(false)
+              LocationManager locationManager=(LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
+                if(!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext(),R.style.LightDialogTheme);
+                    builder.setMessage(getString(R.string.turn_on_gps))
+                            .setCancelable(false)
 
-                    .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                        }
-                    })
+                            .setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int id) {
+                                    startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                                }
+                            })
 
-                    .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int id) {
-                            getActivity().finish();
-                        }
-                    });
+                            .setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int id) {
+                                    getActivity().finish();
+                                }
+                            });
 
-            AlertDialog alert = builder.create();
-            alert.setTitle(getString(R.string.gps_service_required));
-            alert.show();
-        }
-    }
+                    AlertDialog alert = builder.create();
+                    alert.setTitle(getString(R.string.gps_service_required));
+                    alert.show();
+                }
+            }
 
 //############################################Initializations######################################################################
     private void initializeMap() {
@@ -170,7 +193,8 @@ public class MapFragment extends Fragment implements AdapterView.OnItemSelectedL
     }
 
     private void updateMyMarker(){
-        Location location= location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        LocationManager locationManager=(LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
+        Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         LatLng gps = new LatLng(location.getLatitude(), location.getLongitude());
         myMarker=new MarkerOptions().position(gps).title(getString(R.string.current_position)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
     }
@@ -236,8 +260,29 @@ public class MapFragment extends Fragment implements AdapterView.OnItemSelectedL
     @Override
     public void onNothingSelected(AdapterView<?> parent) { }
 
-    @Override
-    public void onLocationChanged(Location location) {
-        updateMyMarker();
+    private View reloadView(int id){
+        final LayoutInflater inflater = LayoutInflater.from(this.getActivity());
+        View reloadView=inflater.inflate(R.layout.reload, null);
+
+        TextView textView=reloadView.findViewById(R.id.infoText);
+        textView.setText(getString(id));
+
+        Button button=reloadView.findViewById(R.id.reloadButton);
+        button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                Fragment currentFragment=getActivity().getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                FragmentTransaction fragTrasaction=getActivity().getSupportFragmentManager().beginTransaction();
+                fragTrasaction.detach(currentFragment);
+                fragTrasaction.attach(currentFragment);
+                fragTrasaction.commit();
+            }
+        });
+
+        return reloadView;
     }
+
+
+
 }
