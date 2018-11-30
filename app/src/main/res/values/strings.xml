@@ -22,6 +22,8 @@
     <string name="title_stats_steps">Steps</string>
     <string name="title_stats_activetime">Active Time</string>
 
+    <string name="title_add_food">Add Food</string>
+
     <string name="spinner_routes">Routes</string>
 
     <string name="internet_connection_required">Internet connection required</string>
