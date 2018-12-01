@@ -46,6 +46,7 @@
                 android:id="@+id/emailValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/emailLabel"
                 android:ems="10"
                 android:inputType="textEmailAddress"
                 tools:ignore="Autofill" />
@@ -70,6 +71,7 @@
                 android:id="@+id/passwordValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/passwordLabel"
                 android:ems="10"
                 android:inputType="textPassword"
                 tools:ignore="Autofill" />

@@ -47,7 +47,8 @@
             <Spinner
                 android:id="@+id/foodValue"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/foodLabel" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -69,7 +70,8 @@
             <Spinner
                 android:id="@+id/mealTimeValue"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/mealTimeLabel" />
         </RelativeLayout>
 
 

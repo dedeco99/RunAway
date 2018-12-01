@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">RunAway</string>
-    <string name="google_maps_api_key">AIzaSyAypSYGSyONz9vrPdqgDMDMkdeWI7-2ETQ</string>
+    <string name="google_maps_api_key">AIzaSyAypSYGSyONz9vrPdqgDMDMkdeWI7–2ETQ</string>
+
+    <string name="splash_description">Logo</string>
 
     <string name="title_login">Login</string>
     <string name="login_email">Email</string>
@@ -8,23 +10,42 @@
     <string name="login_register_link">Don\'t have an account? Register.</string>
 
     <string name="title_register">Register</string>
+    <string name="register_name">Name</string>
+    <string name="register_email">Email</string>
+    <string name="register_password">Login</string>
+    <string name="register_login_link">Already have an account? Login.</string>
+
     <string name="title_map">Map</string>
     <string name="title_full_map">Route Map</string>
+
     <string name="title_stats">Stats and Goals</string>
     <string name="title_full_stats">Stats and Goals</string>
-    <string name="title_track">Track</string>
-    <string name="title_full_track">Track Exercise</string>
-    <string name="title_exercises">Exercises</string>
-    <string name="title_full_exercises">Exercises</string>
-    <string name="title_meals">Meals</string>
-    <string name="title_full_meals">Nutrition Tracker</string>
-    <string name="title_settings">Settings</string>
-    <string name="title_full_settings">Settings</string>
 
     <string name="title_stats_distance">Distance</string>
     <string name="title_stats_speed">Speed</string>
     <string name="title_stats_steps">Steps</string>
     <string name="title_stats_activetime">Active Time</string>
+
+    <string name="title_track">Track</string>
+    <string name="title_full_track">Track Exercise</string>
+    <string name="track_time">Time</string>
+    <string name="track_time_value">00:00:00</string>
+    <string name="track_distance">Distance</string>
+    <string name="track_distance_value">0 m</string>
+    <string name="track_altitude">Altitude</string>
+    <string name="track_altitude_value">0</string>
+    <string name="track_altitude_unit">m</string>
+    <string name="track_steps">Steps</string>
+    <string name="track_steps_value">0</string>
+    <string name="track_speed">Speed</string>
+    <string name="track_speed_value">0</string>
+    <string name="track_speed_unit">min/Km</string>
+
+    <string name="title_exercises">Exercises</string>
+    <string name="title_full_exercises">Exercises</string>
+
+    <string name="title_meals">Meals</string>
+    <string name="title_full_meals">Nutrition Tracker</string>
 
     <string name="title_add_meal">Add Meal</string>
     <string name="add_meal_food">Food</string>
@@ -33,6 +54,11 @@
     <string name="title_add_food">Add Food</string>
     <string name="add_food_name">Name</string>
     <string name="add_food_calories">Calories</string>
+
+    <string name="title_settings">Settings</string>
+    <string name="title_full_settings">Settings</string>
+
+
 
     <string name="spinner_routes">Routes</string>
 

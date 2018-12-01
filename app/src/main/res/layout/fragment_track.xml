@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -21,13 +22,14 @@
             android:id="@+id/timeInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            tools:ignore="NestedWeights">
             <TextView
                 android:id="@+id/timeLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="Time"
+                android:text="@string/track_time"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
             <TextView
@@ -36,7 +38,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/timeLabel"
-                android:text="00:00:00"
+                android:text="@string/track_time_value"
                 android:textSize="48sp"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
         </RelativeLayout>
@@ -51,7 +53,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="Distance"
+                android:text="@string/track_distance"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
             <TextView
@@ -60,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@+id/distanceLabel"
-                android:text="0 m"
+                android:text="@string/track_distance_value"
                 android:textSize="48sp"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
         </RelativeLayout>
@@ -70,7 +72,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:weightSum="3">
+            android:weightSum="3"
+            android:baselineAligned="false">
 
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@+id/altitudeInfo"
@@ -82,7 +85,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:text="Altitude"
+                    android:text="@string/track_altitude"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
                 <TextView
@@ -91,7 +94,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/altitudeLabel"
-                    android:text="0"
+                    android:text="@string/track_altitude_value"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
                 <TextView
@@ -100,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/altitudeValue"
-                    android:text="m"
+                    android:text="@string/track_altitude_unit"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
             </RelativeLayout>
 
@@ -115,7 +118,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:text="Steps"
+                    android:text="@string/track_steps"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
                 <TextView
@@ -124,7 +127,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/stepsLabel"
                     android:layout_centerHorizontal="true"
-                    android:text="0"
+                    android:text="@string/track_steps_value"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
             </RelativeLayout>
 
@@ -138,7 +141,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:text="Velocidade"
+                    android:text="@string/track_speed"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
                 <TextView
@@ -147,7 +150,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/speedLabel"
-                    android:text="0"
+                    android:text="@string/track_speed_value"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
                 <TextView
@@ -156,7 +159,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_below="@+id/speedValue"
-                    android:text="min/Km"
+                    android:text="@string/track_speed_unit"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
             </RelativeLayout>
         </LinearLayout>
@@ -186,7 +189,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/trackButton"
             android:layout_toEndOf="@+id/trackButton"
-            android:layout_marginLeft="15dp"
+            android:layout_marginStart="15dp"
             android:src="@drawable/ic_stop_white_24dp"
             android:tint="@color/colorAccent"
             app:fabSize="normal"

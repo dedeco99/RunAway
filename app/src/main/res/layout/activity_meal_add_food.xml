@@ -48,6 +48,7 @@
                 android:id="@+id/nameValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/nameLabel"
                 android:ems="10"
                 android:inputType="text"
                 tools:ignore="Autofill"/>
@@ -73,6 +74,7 @@
                 android:id="@+id/caloriesValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/caloriesLabel"
                 android:ems="10"
                 android:inputType="number"
                 tools:ignore="Autofill"/>
