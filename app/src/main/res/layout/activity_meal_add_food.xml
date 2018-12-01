@@ -41,15 +41,16 @@
                 android:id="@+id/nameLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Name" />
+                android:labelFor="@+id/nameValue"
+                android:text="@string/add_food_name" />
 
             <EditText
                 android:id="@+id/nameValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/nameLabel"
                 android:ems="10"
-                android:inputType="text"/>
+                android:inputType="text"
+                tools:ignore="Autofill"/>
         </RelativeLayout>
 
         <RelativeLayout
@@ -65,15 +66,16 @@
                 android:id="@+id/caloriesLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Calories" />
+                android:labelFor="@id/caloriesValue"
+                android:text="@string/add_food_calories" />
 
             <EditText
                 android:id="@+id/caloriesValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/caloriesLabel"
                 android:ems="10"
-                android:inputType="number"/>
+                android:inputType="number"
+                tools:ignore="Autofill"/>
         </RelativeLayout>
 
 

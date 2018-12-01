@@ -1,62 +1,59 @@
 package com.runaway.runaway;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.util.LruCache;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-public class RequestSingleton {
-    private static RequestSingleton mInstance;
-    private RequestQueue mRequestQueue;
-    private ImageLoader mImageLoader;
-    private static Context mCtx;
+import org.json.JSONObject;
 
-    private RequestSingleton(Context context) {
-        mCtx = context;
-        mRequestQueue = getRequestQueue();
+class RequestSingleton {
+    private static RequestSingleton instance;
+    private RequestQueue requestQueue;
 
-        mImageLoader = new ImageLoader(mRequestQueue,
-                new ImageLoader.ImageCache() {
-                    private final LruCache<String, Bitmap>
-                            cache = new LruCache<String, Bitmap>(20);
-
-                    @Override
-                    public Bitmap getBitmap(String url) {
-                        return cache.get(url);
-                    }
-
-                    @Override
-                    public void putBitmap(String url, Bitmap bitmap) {
-                        cache.put(url, bitmap);
-                    }
-                });
-    }
-
-    public static synchronized RequestSingleton getInstance(Context context) {
-        if (mInstance == null) {
-            mInstance = new RequestSingleton(context);
+    static synchronized RequestSingleton getInstance() {
+        if (instance == null) {
+            instance = new RequestSingleton();
         }
-        return mInstance;
+        return instance;
     }
 
-    public RequestQueue getRequestQueue() {
-        if (mRequestQueue == null) {
-            // getApplicationContext() is key, it keeps you from leaking the
-            // Activity or BroadcastReceiver if someone passes one in.
-            mRequestQueue = Volley.newRequestQueue(mCtx.getApplicationContext());
+    private RequestQueue getRequestQueue(Context context) {
+        if (requestQueue == null) {
+            requestQueue = Volley.newRequestQueue(context);
         }
-        return mRequestQueue;
+        return requestQueue;
     }
 
-    public <T> void addToRequestQueue(Request<T> req) {
-        getRequestQueue().add(req);
+    private <T> void addToRequestQueue(Request<T> req, Context context) {
+        getRequestQueue(context).add(req);
     }
 
-    public ImageLoader getImageLoader() {
-        return mImageLoader;
+    void getRequest(String url, RequestGetHandler requestGetHandler, Context context){
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(
+                Request.Method.GET, url, null,
+                requestGetHandler::handleGetRequest,
+                error->handleError(error.toString(), context)
+        );
+
+        RequestSingleton.getInstance().addToRequestQueue(jsonArrayRequest, context);
+    }
+
+    void postRequest(String url, JSONObject jsonBody, RequestPostHandler requestPostHandler, Context context){
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.POST, url, jsonBody,
+                requestPostHandler::handlePostRequest,
+                error->handleError(error.toString(), context)
+        );
+
+        RequestSingleton.getInstance().addToRequestQueue(jsonObjectRequest, context);
+    }
+
+    private void handleError(String error, Context context){
+        Toast.makeText(context, "Error: " + error, Toast.LENGTH_SHORT).show();
     }
 }

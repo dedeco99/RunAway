@@ -3,6 +3,10 @@
     <string name="google_maps_api_key">AIzaSyAypSYGSyONz9vrPdqgDMDMkdeWI7-2ETQ</string>
 
     <string name="title_login">Login</string>
+    <string name="login_email">Email</string>
+    <string name="login_password">Login</string>
+    <string name="login_register_link">Don\'t have an account? Register.</string>
+
     <string name="title_register">Register</string>
     <string name="title_map">Map</string>
     <string name="title_full_map">Route Map</string>
@@ -23,7 +27,12 @@
     <string name="title_stats_activetime">Active Time</string>
 
     <string name="title_add_meal">Add Meal</string>
+    <string name="add_meal_food">Food</string>
+    <string name="add_meal_meal_time">Meal Time</string>
+
     <string name="title_add_food">Add Food</string>
+    <string name="add_food_name">Name</string>
+    <string name="add_food_calories">Calories</string>
 
     <string name="spinner_routes">Routes</string>
 

@@ -29,7 +29,7 @@
         android:padding="15dp">
 
         <RelativeLayout
-            android:id="@+id/mealInfo"
+            android:id="@+id/foodInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -38,16 +38,16 @@
             android:padding="5dp">
 
             <TextView
-                android:id="@+id/mealLabel"
+                android:id="@+id/foodLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Meal" />
+                android:labelFor="@+id/foodValue"
+                android:text="@string/add_meal_food" />
 
             <Spinner
-                android:id="@+id/mealValue"
+                android:id="@+id/foodValue"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/mealLabel"/>
+                android:layout_height="wrap_content" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -63,13 +63,13 @@
                 android:id="@+id/mealTimeLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Meal Time" />
+                android:labelFor="@+id/mealTimeValue"
+                android:text="@string/add_meal_meal_time" />
 
             <Spinner
                 android:id="@+id/mealTimeValue"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/mealTimeLabel"/>
+                android:layout_height="wrap_content"/>
         </RelativeLayout>
 
 

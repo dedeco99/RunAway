@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
@@ -38,15 +39,16 @@
                 android:id="@+id/emailLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Email" />
+                android:labelFor="@id/emailValue"
+                android:text="@string/login_email" />
 
             <EditText
                 android:id="@+id/emailValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/emailLabel"
                 android:ems="10"
-                android:inputType="textEmailAddress" />
+                android:inputType="textEmailAddress"
+                tools:ignore="Autofill" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -61,15 +63,16 @@
                 android:id="@+id/passwordLabel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Password" />
+                android:labelFor="@id/passwordValue"
+                android:text="@string/login_password" />
 
             <EditText
                 android:id="@+id/passwordValue"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/passwordLabel"
                 android:ems="10"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                tools:ignore="Autofill" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -97,7 +100,7 @@
                 android:layout_below="@id/loginButton"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="15dp"
-                android:text="Don't have an account? Register." />
+                android:text="@string/login_register_link"/>
         </RelativeLayout>
 
     </LinearLayout>

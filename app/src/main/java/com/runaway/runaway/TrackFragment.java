@@ -2,16 +2,17 @@ package com.runaway.runaway;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.transition.Visibility;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,24 +20,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static android.content.Context.SENSOR_SERVICE;
 
-public class TrackFragment extends Fragment {
-    private View view;
+public class TrackFragment extends Fragment implements RequestPostHandler{
     private Context context;
     private TextView timeValue;
     private TextView distanceValue;
@@ -44,7 +35,7 @@ public class TrackFragment extends Fragment {
     private TextView stepsValue;
     private TextView speedValue;
     private FloatingActionButton trackButton;
-    private String trackState = "paused";;
+    private String trackState = "paused";
     private FloatingActionButton saveButton;
 
     long startTime = 0,currentTime=0;
@@ -55,10 +46,11 @@ public class TrackFragment extends Fragment {
     private Sensor stepSensor;
     private SensorEventListener sensorEventListener;
 
+    @SuppressLint("InflateParams")
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view=inflater.inflate(R.layout.fragment_track, null);
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_track, null);
         context=this.getContext();
 
         timeValue = view.findViewById(R.id.timeValue);
@@ -76,36 +68,10 @@ public class TrackFragment extends Fragment {
         return view;
     }
 
-    public void handleButtons(){
-        trackButton.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("RestrictedApi")
-            @Override
-            public void onClick(View view) {
-                if(trackState.equals("tracking")){
-                    trackState="paused";
-                    timerHandler.removeCallbacks(timerRunnable);
-                    sensorManager.unregisterListener(sensorEventListener);
-
-                    trackButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.colorPrimary));
-                    trackButton.setImageResource(R.drawable.ic_play_white_24dp);
-                    saveButton.setVisibility(View.VISIBLE);
-                }else if(trackState.equals("paused")){
-                    trackState="tracking";
-                    startTime = System.currentTimeMillis()-currentTime;
-                    timerHandler.postDelayed(timerRunnable, 0);
-                    sensorManager.registerListener(sensorEventListener, stepSensor,SensorManager.SENSOR_DELAY_NORMAL);
-
-                    trackButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.colorPaused));
-                    trackButton.setImageResource(R.drawable.ic_pause_white_24dp);
-                    saveButton.setVisibility(View.VISIBLE);
-                }
-            }
-        });
-
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("RestrictedApi")
-            @Override
-            public void onClick(View view) {
+    @SuppressLint("RestrictedApi")
+    private void handleButtons(){
+        trackButton.setOnClickListener(view -> {
+            if(trackState.equals("tracking")){
                 trackState="paused";
                 timerHandler.removeCallbacks(timerRunnable);
                 sensorManager.unregisterListener(sensorEventListener);
@@ -113,15 +79,35 @@ public class TrackFragment extends Fragment {
                 trackButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.colorPrimary));
                 trackButton.setImageResource(R.drawable.ic_play_white_24dp);
                 saveButton.setVisibility(View.VISIBLE);
+            }else if(trackState.equals("paused")){
+                trackState="tracking";
+                startTime = System.currentTimeMillis()-currentTime;
+                timerHandler.postDelayed(timerRunnable, 0);
+                sensorManager.registerListener(sensorEventListener, stepSensor,SensorManager.SENSOR_DELAY_NORMAL);
 
-                saveTrack();
+                trackButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.colorPaused));
+                trackButton.setImageResource(R.drawable.ic_pause_white_24dp);
+                saveButton.setVisibility(View.VISIBLE);
             }
+        });
+
+        saveButton.setOnClickListener(view -> {
+            trackState="paused";
+            timerHandler.removeCallbacks(timerRunnable);
+            sensorManager.unregisterListener(sensorEventListener);
+
+            trackButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.colorPrimary));
+            trackButton.setImageResource(R.drawable.ic_play_white_24dp);
+            saveButton.setVisibility(View.VISIBLE);
+
+            saveTrack();
         });
     }
 
     public void handleTimer(){
         timerHandler = new Handler();
         timerRunnable = new Runnable() {
+            @SuppressLint("DefaultLocale")
             @Override
             public void run() {
                 long millis = System.currentTimeMillis() - startTime;
@@ -148,6 +134,7 @@ public class TrackFragment extends Fragment {
 
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onSensorChanged(SensorEvent event) {
                 if (event.values[0] == 1.0f) {
@@ -164,7 +151,11 @@ public class TrackFragment extends Fragment {
         String url = "https://api.mlab.com/api/1/databases/runaway/collections/tracks?apiKey=gMqDeofsYMBMCO6RJBydS59weP9OCJZf";
         JSONObject jsonBody = new JSONObject();
 
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        String user = sharedPref.getString("user", "nope");
+
         try {
+            jsonBody.put("user", user);
             jsonBody.put("time", timeValue.getText());
             jsonBody.put("distance", Integer.parseInt(distanceValue.getText().subSequence(0,distanceValue.getText().length()-2).toString()));
             jsonBody.put("altitude", Integer.parseInt(altitudeValue.getText().toString()));
@@ -175,28 +166,22 @@ public class TrackFragment extends Fragment {
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.POST, url, jsonBody, new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Toast.makeText(context, "Track saved successfully", Toast.LENGTH_SHORT).show();
-                        resetTracker();
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(context, "Error: " + error.toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        RequestPostHandler requestPostHandler = this;
+        RequestSingleton.getInstance().postRequest(url, jsonBody, requestPostHandler, context);
+    }
 
-        RequestSingleton.getInstance(context).addToRequestQueue(jsonObjectRequest);
+    @Override
+    public void handlePostRequest(JSONObject response) {
+        Toast.makeText(context, "Track saved successfully", Toast.LENGTH_SHORT).show();
+        resetTracker();
     }
 
     @SuppressLint("RestrictedApi")
     public void resetTracker(){
         startTime = 0;
         currentTime=0;
-        timeValue.setText("00:00:00");
+        String defaultTime="00:00:00";
+        timeValue.setText(defaultTime);
         distanceValue.setText("0 m");
         altitudeValue.setText("0");
         stepsValue.setText("0");
