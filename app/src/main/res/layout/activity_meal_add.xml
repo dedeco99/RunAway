@@ -104,7 +104,7 @@
         android:layout_margin="16dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_exercises_black_24dp"
+        android:src="@android:drawable/ic_input_add"
         android:tint="@color/colorAccent"
         app:backgroundTint="@color/colorPrimary"
         app:fabSize="normal" />

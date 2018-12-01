@@ -32,10 +32,10 @@
     </RelativeLayout>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/my_recycler_view"
+        android:id="@+id/mealsView"
         android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/caloriesInfo"/>
 
     <android.support.design.widget.FloatingActionButton
@@ -45,7 +45,7 @@
         android:layout_margin="16dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:src="@drawable/ic_exercises_black_24dp"
+        android:src="@android:drawable/ic_input_add"
         android:tint="@color/colorAccent"
         app:backgroundTint="@color/colorPrimary"
         app:fabSize="normal" />

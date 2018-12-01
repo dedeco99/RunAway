@@ -1,5 +1,6 @@
 package com.runaway.runaway;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.preference.PreferenceManager;
@@ -66,6 +67,8 @@ public class MealsAddFoodActivity extends AppCompatActivity implements RequestPo
     @Override
     public void handlePostRequest(JSONObject response) {
         Toast.makeText(getApplicationContext(), "Food saved successfully", Toast.LENGTH_SHORT).show();
+        Intent returnIntent = new Intent();
+        setResult(RESULT_OK,returnIntent);
         finish();
     }
 }

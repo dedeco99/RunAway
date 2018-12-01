@@ -77,7 +77,7 @@ public class TrackFragment extends Fragment implements RequestPostHandler{
                 sensorManager.unregisterListener(sensorEventListener);
 
                 trackButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.colorPrimary));
-                trackButton.setImageResource(R.drawable.ic_play_white_24dp);
+                trackButton.setImageResource(android.R.drawable.ic_media_play);
                 saveButton.setVisibility(View.VISIBLE);
             }else if(trackState.equals("paused")){
                 trackState="tracking";
@@ -86,7 +86,7 @@ public class TrackFragment extends Fragment implements RequestPostHandler{
                 sensorManager.registerListener(sensorEventListener, stepSensor,SensorManager.SENSOR_DELAY_NORMAL);
 
                 trackButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.colorPaused));
-                trackButton.setImageResource(R.drawable.ic_pause_white_24dp);
+                trackButton.setImageResource(android.R.drawable.ic_media_pause);
                 saveButton.setVisibility(View.VISIBLE);
             }
         });
@@ -97,7 +97,7 @@ public class TrackFragment extends Fragment implements RequestPostHandler{
             sensorManager.unregisterListener(sensorEventListener);
 
             trackButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.colorPrimary));
-            trackButton.setImageResource(R.drawable.ic_play_white_24dp);
+            trackButton.setImageResource(android.R.drawable.ic_media_play);
             saveButton.setVisibility(View.VISIBLE);
 
             saveTrack();
@@ -187,7 +187,7 @@ public class TrackFragment extends Fragment implements RequestPostHandler{
         stepsValue.setText("0");
         speedValue.setText("0");
         trackButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.colorPrimary));
-        trackButton.setImageResource(R.drawable.ic_play_white_24dp);
+        trackButton.setImageResource(android.R.drawable.ic_media_play);
         saveButton.setVisibility(View.INVISIBLE);
     }
 }

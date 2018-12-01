@@ -46,6 +46,7 @@
 
     <string name="title_meals">Meals</string>
     <string name="title_full_meals">Nutrition Tracker</string>
+    <string name="meals_delete">Delete</string>
 
     <string name="title_add_meal">Add Meal</string>
     <string name="add_meal_food">Food</string>

@@ -53,6 +53,16 @@ class RequestSingleton {
         RequestSingleton.getInstance().addToRequestQueue(jsonObjectRequest, context);
     }
 
+    void deleteRequest(String url, RequestDeleteHandler requestDeleteHandler, Context context){
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.DELETE, url, null,
+                requestDeleteHandler::handleDeleteRequest,
+                error->handleError(error.toString(), context)
+        );
+
+        RequestSingleton.getInstance().addToRequestQueue(jsonObjectRequest, context);
+    }
+
     private void handleError(String error, Context context){
         Toast.makeText(context, "Error: " + error, Toast.LENGTH_SHORT).show();
     }

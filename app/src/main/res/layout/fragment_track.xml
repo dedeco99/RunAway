@@ -178,7 +178,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_play_white_24dp"
+            android:src="@android:drawable/ic_media_play"
             android:tint="@color/colorAccent"
             app:fabSize="normal"
             app:backgroundTint="@color/colorPrimary"/>

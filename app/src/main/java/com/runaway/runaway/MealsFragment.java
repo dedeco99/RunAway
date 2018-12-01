@@ -2,9 +2,8 @@ package com.runaway.runaway;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -13,72 +12,119 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Date;
+import java.util.ArrayList;
 
-public class MealsFragment extends Fragment {
+public class MealsFragment extends Fragment implements RequestGetHandler,RequestDeleteHandler {
     private Context context;
+    private ProgressBar caloriesProgress;
+    private TextView caloriesValue;
+    private RecyclerView mealsView;
+    private MealsViewAdapter adapter;
+    private ArrayList<MealItem> mealsList;
+    private FloatingActionButton addMealButton;
+
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_meals,container,false);
         context=this.getContext();
 
-        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
+        caloriesProgress = view.findViewById(R.id.caloriesProgress);
+        caloriesValue = view.findViewById(R.id.caloriesValue);
+        mealsView = view.findViewById(R.id.mealsView);
+        mealsView.setHasFixedSize(true);
+        addMealButton = view.findViewById(R.id.addMealButton);
 
-        mRecyclerView.setHasFixedSize(true);
+        getMeals();
+        handleButtons();
 
-        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        return view;
+    }
 
-        JSONArray data=new JSONArray();
-        try {
-            data=new JSONArray("[{name:'Milk and cookies',time:'Breakfast',calories:400},{name:'Spaget and beef',time:'Lunch',calories:800},{name:'Cereal',time:'Dinner',calories:500}]");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    private void handleButtons(){
+        addMealButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getContext(), MealsAddActivity.class);
+            startActivity(intent);
+        });
+    }
 
-        Double calories=0.0,totalCalories=2000.0;
-        for(int i=0;i<data.length();i++){
+    private void getMeals(){
+        String url = "https://api.mlab.com/api/1/databases/runaway/collections/meals?q=&apiKey=gMqDeofsYMBMCO6RJBydS59weP9OCJZf";
+        RequestGetHandler requestGetHandler = this;
+        RequestSingleton.getInstance().getRequest(url, requestGetHandler, context);
+    }
+
+    @Override
+    public void handleGetRequest(JSONArray response) {
+        mealsList = new ArrayList<>();
+
+        for(int i=0;i<response.length();i++){
             try {
-                calories+=data.getJSONObject(i).getDouble("calories");
+                String mealId = response.getJSONObject(i).getJSONObject("_id").getString("$oid");
+                String mealName = response.getJSONObject(i).getString("meal");
+                String mealCalories = response.getJSONObject(i).getString("calories");
+                String mealTime = response.getJSONObject(i).getString("mealTime");
+
+                mealsList.add(new MealItem(mealId, mealName, Integer.parseInt(mealCalories), mealTime));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        ProgressBar caloriesProgress=(ProgressBar) view.findViewById(R.id.caloriesProgress);
-        Double progress=(calories/totalCalories)*100;
-        caloriesProgress.setProgress(progress.intValue());
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context);
+        mealsView.setLayoutManager(layoutManager);
 
-        TextView caloriesValue=(TextView) view.findViewById(R.id.caloriesValue);
-        String toSet=String.valueOf(calories.intValue())+" of "+String.valueOf(totalCalories.intValue())+" calories";
-        caloriesValue.setText(toSet);
+        adapter = new MealsViewAdapter(mealsList);
+        adapter.setOnItemClickListener(this::removeItem);
+        mealsView.setAdapter(adapter);
 
-        FloatingActionButton addMealButton = view.findViewById(R.id.addMealButton);
-        addMealButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v){
-                Intent intent = new Intent(getContext(), MealsAddActivity.class);
-                startActivity(intent);
-            }
-        });
+        setCalories();
+    }
 
-        MealsViewAdapter mAdapter = new MealsViewAdapter(data);
-        mRecyclerView.setAdapter(mAdapter);
-        return view;
+    private void setCalories(){
+        double calories=0,totalCalories=2000;
+
+        for(int i=0;i<mealsList.size();i++){
+            calories += mealsList.get(i).getCalories();
+        }
+
+        double progress = (calories/totalCalories)*100;
+        caloriesProgress.setProgress((int) progress);
+
+        String caloriesText=String.valueOf((int) calories)+" of "+String.valueOf((int) totalCalories)+" calories";
+        caloriesValue.setText(caloriesText);
+    }
+
+    private void removeItem(int position){
+        deleteMeal(mealsList.get(position).getId());
+        mealsList.remove(position);
+        adapter.notifyItemRemoved(position);
+        setCalories();
+    }
+
+    private void deleteMeal(String id) {
+        String url = "https://api.mlab.com/api/1/databases/runaway/collections/meals/"+id+"?apiKey=gMqDeofsYMBMCO6RJBydS59weP9OCJZf";
+        RequestDeleteHandler requestDeleteHandler = this;
+        RequestSingleton.getInstance().deleteRequest(url, requestDeleteHandler, context);
+    }
+
+    @Override
+    public void handleDeleteRequest(JSONObject response) {
+        Toast.makeText(context, "Meal successfully deleted", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        getMeals();
     }
 }

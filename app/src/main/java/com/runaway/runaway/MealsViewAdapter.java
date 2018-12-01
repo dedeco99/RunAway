@@ -1,65 +1,75 @@
 package com.runaway.runaway;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
+import java.util.ArrayList;
 
-public class MealsViewAdapter extends RecyclerView.Adapter<MealsViewAdapter.MyViewHolder> {
-    private JSONArray mDataset;
+public class MealsViewAdapter extends RecyclerView.Adapter<MealsViewAdapter.MealViewHolder> {
+    private ArrayList<MealItem> mealList;
+    private OnItemClickListener clickListener;
 
-    // Provide a reference to the views for each data item
-    // Complex data items may need more than one view per item, and
-    // you provide access to all the views for a data item in a view holder
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
-        public RelativeLayout view;
-        public MyViewHolder(RelativeLayout v) {
-            super(v);
-            view = v;
+    public interface OnItemClickListener{
+        void onDeleteClick(int position);
+    }
+
+    void setOnItemClickListener(OnItemClickListener listener){ clickListener = listener; }
+
+    static class MealViewHolder extends RecyclerView.ViewHolder{
+        private TextView mealId;
+        private TextView mealName;
+        //private TextView mealCalories;
+        private TextView mealTime;
+        private ImageView deleteMeal;
+
+        MealViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
+            super(itemView);
+
+            mealId = itemView.findViewById(R.id.mealId);
+            mealName = itemView.findViewById(R.id.mealName);
+            mealTime = itemView.findViewById(R.id.mealTime);
+            deleteMeal = itemView.findViewById(R.id.deleteMeal);
+
+            deleteMeal.setOnClickListener(view -> {
+                if(listener!=null){
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION){
+                        listener.onDeleteClick(position);
+                    }
+                }
+            });
         }
     }
 
-    // Provide a suitable constructor (depends on the kind of dataset)
-    public MealsViewAdapter(JSONArray myDataset) {
-        mDataset = myDataset;
+    MealsViewAdapter(ArrayList<MealItem> dataSet){
+        mealList = dataSet;
     }
 
-    // Create new views (invoked by the layout manager)
+    @NonNull
     @Override
-    public MealsViewAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                     int viewType) {
-        // create a new view
-        RelativeLayout v = (RelativeLayout) LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.meal_layout, parent, false);
+    public MealViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+        View view = LayoutInflater.from(viewGroup.getContext())
+                .inflate(R.layout.meal_layout, viewGroup, false);
 
-        MyViewHolder vh = new MyViewHolder(v);
-        return vh;
+        return new MealViewHolder(view, clickListener);
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
-        // - get element from your dataset at this position
-        // - replace the contents of the view with that element
-        TextView mealName=(TextView) holder.view.findViewById(R.id.mealName);
-        TextView mealTime=(TextView) holder.view.findViewById(R.id.mealTime);
-        try {
-            mealName.setText(mDataset.getJSONObject(position).getString("name"));
-            mealTime.setText(mDataset.getJSONObject(position).getString("time"));
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+    public void onBindViewHolder(@NonNull MealViewHolder mealViewHolder, int i) {
+        MealItem currentItem = mealList.get(i);
+
+        mealViewHolder.mealId.setText(currentItem.getId());
+        mealViewHolder.mealName.setText(currentItem.getName());
+        mealViewHolder.mealTime.setText(currentItem.getTime());
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mDataset.length();
+        return mealList.size();
     }
 }
