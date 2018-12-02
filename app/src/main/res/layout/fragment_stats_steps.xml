@@ -3,17 +3,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/stepsValue"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/stepsInfo"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+        android:padding="15dp"
+        android:layout_margin="15dp">
+
+        <TextView
+            android:id="@+id/stepsValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+        <ProgressBar
+            android:id="@+id/stepsProgress"
+            style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
+            android:progressTint="@color/colorPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/stepsValue"
+            android:layout_margin="5dp" />
+
+        <TextView
+            android:id="@+id/stepsToGoal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/stepsProgress"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+    </RelativeLayout>
 
     <com.github.mikephil.charting.charts.BarChart
         android:id="@+id/stepsChart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/stepsValue"/>
+        android:layout_below="@id/stepsInfo"/>
 
     <!--<ProgressBar
         android:id="@+id/stepsProgress"

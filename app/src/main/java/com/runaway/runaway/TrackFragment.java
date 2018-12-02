@@ -23,7 +23,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Date;
+import java.util.Calendar;
 
 import static android.content.Context.SENSOR_SERVICE;
 
@@ -38,6 +38,7 @@ public class TrackFragment extends Fragment implements RequestPostHandler{
     private String trackState = "paused";
     private FloatingActionButton saveButton;
 
+    private int mStep = 0;
     long startTime = 0,currentTime=0;
     Handler timerHandler;
     Runnable timerRunnable;
@@ -127,7 +128,6 @@ public class TrackFragment extends Fragment implements RequestPostHandler{
         sensorManager = (SensorManager) context.getSystemService(SENSOR_SERVICE);
         stepSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         sensorEventListener = new SensorEventListener() {
-            private int mStep;
 
             @Override
             public void onAccuracyChanged(Sensor sensor, int accuracy) {
@@ -147,12 +147,17 @@ public class TrackFragment extends Fragment implements RequestPostHandler{
         sensorManager.unregisterListener(sensorEventListener);
     }
 
+    @SuppressLint("DefaultLocale")
     public void saveTrack(){
         String url = "https://api.mlab.com/api/1/databases/runaway/collections/tracks?apiKey=gMqDeofsYMBMCO6RJBydS59weP9OCJZf";
         JSONObject jsonBody = new JSONObject();
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String user = sharedPref.getString("user", "nope");
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH)+1;
+        int year = calendar.get(Calendar.YEAR);
 
         try {
             jsonBody.put("user", user);
@@ -161,7 +166,7 @@ public class TrackFragment extends Fragment implements RequestPostHandler{
             jsonBody.put("altitude", Integer.parseInt(altitudeValue.getText().toString()));
             jsonBody.put("steps", Integer.parseInt(stepsValue.getText().toString()));
             jsonBody.put("speed", Integer.parseInt(speedValue.getText().toString()));
-            jsonBody.put("created",new Date());
+            jsonBody.put("created",String.format("%02d/%02d/%02d", day, month, year));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -184,6 +189,7 @@ public class TrackFragment extends Fragment implements RequestPostHandler{
         timeValue.setText(defaultTime);
         distanceValue.setText("0 m");
         altitudeValue.setText("0");
+        mStep = 0;
         stepsValue.setText("0");
         speedValue.setText("0");
         trackButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.colorPrimary));

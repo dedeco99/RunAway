@@ -2,7 +2,9 @@ package com.runaway.runaway;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -57,7 +59,10 @@ public class MealsFragment extends Fragment implements RequestGetHandler,Request
     }
 
     private void getMeals(){
-        String url = "https://api.mlab.com/api/1/databases/runaway/collections/meals?q=&apiKey=gMqDeofsYMBMCO6RJBydS59weP9OCJZf";
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        String user = sharedPref.getString("user", "nope");
+
+        String url = "https://api.mlab.com/api/1/databases/runaway/collections/meals?q={'user':'"+user+"'}&apiKey=gMqDeofsYMBMCO6RJBydS59weP9OCJZf";
         RequestGetHandler requestGetHandler = this;
         RequestSingleton.getInstance().getRequest(url, requestGetHandler, context);
     }
@@ -99,7 +104,7 @@ public class MealsFragment extends Fragment implements RequestGetHandler,Request
         double progress = (calories/totalCalories)*100;
         caloriesProgress.setProgress((int) progress);
 
-        String caloriesText=String.valueOf((int) calories)+" of "+String.valueOf((int) totalCalories)+" calories";
+        String caloriesText = (int) calories + " of " + (int) totalCalories + " calories";
         caloriesValue.setText(caloriesText);
     }
 
