@@ -26,6 +26,11 @@
     <string name="title_stats_steps">Steps</string>
     <string name="title_stats_activetime">Active Time</string>
 
+    <string name="title_add_goal">Add Goal</string>
+    <string name="add_goal_type">Goal Type</string>
+    <string name="add_goal_value">Value (Distance/Speed/Steps/Time)</string>
+    <string name="add_goal_frequency">Frequency</string>
+
     <string name="title_track">Track</string>
     <string name="title_full_track">Track Exercise</string>
     <string name="track_time">Time</string>

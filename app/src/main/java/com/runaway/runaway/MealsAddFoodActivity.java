@@ -35,7 +35,6 @@ public class MealsAddFoodActivity extends AppCompatActivity implements RequestPo
         nameValue = findViewById(R.id.nameValue);
         caloriesValue = findViewById(R.id.caloriesValue);
         addFoodButton = findViewById(R.id.addFoodButton);
-        addFoodButton.setOnClickListener(v -> addFood());
 
         handleButtons();
     }

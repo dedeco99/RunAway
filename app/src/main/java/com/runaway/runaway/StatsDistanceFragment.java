@@ -42,8 +42,7 @@ public class StatsDistanceFragment extends Fragment implements RequestGetHandler
         anyChartView = view.findViewById(R.id.distanceChart);
         distanceProgress = view.findViewById(R.id.distanceProgress);
 
-        getStats();
-        makeChart();
+        //getStats();
 
         return view;
     }
@@ -68,6 +67,8 @@ public class StatsDistanceFragment extends Fragment implements RequestGetHandler
 
         String responseText = "Response: " + distance;
         distanceValue.setText(responseText);
+
+        makeChart();
     }
 
     public void makeChart(){

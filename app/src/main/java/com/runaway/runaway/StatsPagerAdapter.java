@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 public class StatsPagerAdapter extends FragmentPagerAdapter {
     private Context mContext;
 
-    public StatsPagerAdapter(Context context, FragmentManager fm) {
+    StatsPagerAdapter(Context context, FragmentManager fm) {
         super(fm);
         mContext = context;
     }
@@ -20,7 +20,7 @@ public class StatsPagerAdapter extends FragmentPagerAdapter {
         } else if (position == 1){
             return new StatsSpeedFragment();
         } else if (position == 2){
-            return new StatsDistanceFragment();
+            return new StatsStepsFragment();
         } else {
             return new StatsDistanceFragment();
         }
