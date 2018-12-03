@@ -4,4 +4,11 @@
     <color name="colorPrimaryDark">#2196F3</color>
     <color name="colorAccent">#FFFFFF</color>
     <color name="colorPaused">#CC0000</color>
+
+    <color name="darkColorAccent">#28292e</color>
+    <color name="darkColorPrimary">#33343B</color>
+    <color name="darkColorPrimaryDark">#8033343B</color>
+    <color name="darkDividerColor">#cccccc</color>
+
+
 </resources>
