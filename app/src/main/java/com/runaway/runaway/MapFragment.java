@@ -7,6 +7,7 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -23,48 +25,49 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class MapFragment extends Fragment implements AdapterView.OnItemSelectedListener, OnMapReadyCallback{
-    private static final String[] PERMISSIONS=new String[]{
+public class MapFragment extends Fragment implements AdapterView.OnItemSelectedListener, OnMapReadyCallback {
+    private static final String[] PERMISSIONS = new String[]{
             Manifest.permission.INTERNET,
             Manifest.permission.ACCESS_COARSE_LOCATION,
             Manifest.permission.ACCESS_FINE_LOCATION,
             Manifest.permission.ACCESS_NETWORK_STATE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
     };
-    private static final float ZOOM=14.20f;
+    private static final float ZOOM = 14.20f;
 
     private GoogleMap map;
     private LocationManager locationManager;
     private Location location;
 
     private Route selectedRoute;
-    private HashMap<String,Route> routes;
+    private HashMap<String, Route> routes;
 
     @Nullable
     @Override
     public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_map,container,false);
+        View view = inflater.inflate(R.layout.fragment_map, container, false);
 
         //permissions check and request
-        if(RequirementsUtils.isPermissionsMissing(getContext(),PERMISSIONS)){
-            RequirementsUtils.askPermissions(getActivity(), RequirementsUtils.getPermissionsMissing(getContext(),PERMISSIONS));
+        if (RequirementsUtils.isPermissionsMissing(getContext(), PERMISSIONS)) {
+            RequirementsUtils.askPermissions(getActivity(), RequirementsUtils.getPermissionsMissing(getContext(), PERMISSIONS));
             return RequirementsUtils.getFragmentReloadView(getActivity(), R.string.permissions_reload);
         }
 
         //internet check and request
-        if(!RequirementsUtils.isInternetOn(getContext())){
+        if (!RequirementsUtils.isInternetOn(getContext())) {
             RequirementsUtils.requestInternetDialog(getContext());
-            return RequirementsUtils.getFragmentReloadView(getActivity(),R.string.internet_reload);
+            return RequirementsUtils.getFragmentReloadView(getActivity(), R.string.internet_reload);
         }
 
         //gps check and request
-        if(!RequirementsUtils.isGPSOn(getContext())){
+        if (!RequirementsUtils.isGPSOn(getContext())) {
             RequirementsUtils.requestGPSDialog(getContext());
-            return RequirementsUtils.getFragmentReloadView(getActivity(),R.string.gps_reload);
+            return RequirementsUtils.getFragmentReloadView(getActivity(), R.string.gps_reload);
         }
         //Routes and map Setup
         fillRoutesMap();
@@ -72,7 +75,7 @@ public class MapFragment extends Fragment implements AdapterView.OnItemSelectedL
         initializeMap();
 
         //Gui setup
-        Spinner spinner=view.findViewById(R.id.maps_spinner);
+        Spinner spinner = view.findViewById(R.id.maps_spinner);
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item);
         adapter.add(getString(R.string.spinner_routes));
         adapter.addAll(routes.keySet());
@@ -84,7 +87,7 @@ public class MapFragment extends Fragment implements AdapterView.OnItemSelectedL
         return view;
     }
 
-//############################################Initializations######################################################################
+    //############################################Initializations######################################################################
     private void initializeMap() {
         if (map == null) {
             SupportMapFragment mapFrag = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
@@ -92,21 +95,26 @@ public class MapFragment extends Fragment implements AdapterView.OnItemSelectedL
         }
     }
 
-    private void initializeLocationManager(){
+    private void initializeLocationManager() {
         //Better safe than broken
-        if(locationManager!=null &&
-           ContextCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED  &&
-           ContextCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_FINE_LOCATION)==PackageManager.PERMISSION_GRANTED &&
-           ContextCompat.checkSelfPermission(getContext(),Manifest.permission.ACCESS_NETWORK_STATE)==PackageManager.PERMISSION_GRANTED){
+        if (locationManager != null &&
+                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED) {
 
-            locationManager=(LocationManager)getContext().getSystemService(Context.LOCATION_SERVICE);
+            locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         }
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        map=googleMap;
-        drawMyMarker();
+        if (    ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED) {
+            map = googleMap;
+            drawMyMarker();
+        }
+
     }
 
     private void updateMyLocation() {
@@ -145,7 +153,6 @@ public class MapFragment extends Fragment implements AdapterView.OnItemSelectedL
             LatLng gps = new LatLng(location.getLatitude(), location.getLongitude());
             map.addMarker(new MarkerOptions().position(gps).title(getString(R.string.current_position)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         }
-
     }
 
     /**

@@ -3,12 +3,56 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+
+        <!-- android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" /> -->
+
+    <Button
+        android:id="@+id/changeEmailPassButton"
+        android:layout_width="256dp"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/title_settings"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+        android:layout_marginBottom="477dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="@string/change_email_password"
+        android:onClick="changeEmailPassword"
+        android:textColor="@color/colorAccent" />
+
+    <Button
+        android:id="@+id/changeThemeButton"
+        android:layout_width="256dp"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="384dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="@string/change_theme"
+        android:onClick="changeTheme"
+        android:textColor="@color/colorAccent" />
+
+    <Button
+        android:id="@+id/logoutButton"
+        android:layout_width="192dp"
+        android:layout_height="64dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="128dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:onClick="logout"
+        android:text="@string/logout"
+        android:textColor="@color/colorAccent" />
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/notificationsSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="0dp"
+        android:layout_marginBottom="214dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:padding="64dp"
+        android:text="@string/notifications"
+        android:theme="@style/BlueSwitch" />
 
 </RelativeLayout>

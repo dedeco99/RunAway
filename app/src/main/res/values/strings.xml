@@ -90,5 +90,8 @@
     <string name="internet_reload">Reload after connecting to the internet</string>
     <string name="gps_reload">Reload after turing gps on</string>
     <string name="reload">Reload</string>
-
+    <string name="change_email_password">Change Email/Password</string>
+    <string name="change_theme">Change Theme</string>
+    <string name="notifications">Notifications</string>
+    <string name="logout">Logout</string>
 </resources>
