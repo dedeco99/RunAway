@@ -14,7 +14,7 @@
     <string name="register_email">Email</string>
     <string name="register_password">Login</string>
     <string name="register_login_link">Already have an account? Login.</string>
-
+    <string name="no_location_found">No location found</string>
     <string name="title_map">Map</string>
     <string name="title_full_map">Route Map</string>
 
