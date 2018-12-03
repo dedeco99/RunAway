@@ -60,7 +60,7 @@ public class MapFragment extends Fragment implements AdapterView.OnItemSelectedL
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@Nullable LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_map,container,false);
 
         //permissions check and request
@@ -82,7 +82,7 @@ public class MapFragment extends Fragment implements AdapterView.OnItemSelectedL
             checkGPS();
             return reloadView(R.string.gps_reload);
         }
-        
+
            Spinner spinner=(Spinner)view.findViewById(R.id.maps_spinner);
            fillRoutesMap();
            initializeMap();
