@@ -1,6 +1,7 @@
 package com.runaway.runaway;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -15,15 +16,22 @@ public class StatsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
+        StatsStatFragment fragment = new StatsStatFragment();
+        Bundle args = new Bundle();
+
         if (position == 0) {
-            return new StatsDistanceFragment();
+            args.putString("stat", "Distance");
+            args.putString("unit", "meters");
         } else if (position == 1){
-            return new StatsSpeedFragment();
-        } else if (position == 2){
-            return new StatsStepsFragment();
+            args.putString("stat", "Speed");
+            args.putString("unit", "min/Km");
         } else {
-            return new StatsDistanceFragment();
+            args.putString("stat", "Steps");
+            args.putString("unit", "steps");
         }
+
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -40,8 +48,6 @@ public class StatsPagerAdapter extends FragmentPagerAdapter {
                 return mContext.getString(R.string.title_stats_speed);
             case 2:
                 return mContext.getString(R.string.title_stats_steps);
-            case 3:
-                return mContext.getString(R.string.title_stats_activetime);
             default:
                 return null;
         }

@@ -21,9 +21,7 @@ public class StatsFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_stats,container,false);
 
         ViewPager viewPager = view.findViewById(R.id.statsViewPager);
-
         StatsPagerAdapter adapter = new StatsPagerAdapter(getActivity(), getChildFragmentManager());
-
         viewPager.setAdapter(adapter);
 
         TabLayout tabLayout = view.findViewById(R.id.statsTabLayout);

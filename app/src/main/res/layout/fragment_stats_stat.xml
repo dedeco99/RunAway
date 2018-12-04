@@ -3,44 +3,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <Spinner
+        android:id="@+id/frequencyValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true" />
+
     <RelativeLayout
-        android:id="@+id/stepsInfo"
+        android:id="@+id/statInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/frequencyValue"
         android:padding="15dp"
         android:layout_margin="15dp">
 
         <TextView
-            android:id="@+id/stepsValue"
+            android:id="@+id/statValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
         <ProgressBar
-            android:id="@+id/stepsProgress"
+            android:id="@+id/statProgress"
             style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Horizontal"
             android:progressTint="@color/colorPrimary"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/stepsValue"
+            android:layout_below="@id/statValue"
             android:layout_margin="5dp" />
 
         <TextView
-            android:id="@+id/stepsToGoal"
+            android:id="@+id/statToGoal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/stepsProgress"
+            android:layout_below="@id/statProgress"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
     </RelativeLayout>
 
     <com.github.mikephil.charting.charts.BarChart
-        android:id="@+id/stepsChart"
+        android:id="@+id/statChart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/stepsInfo"/>
+        android:layout_below="@id/statInfo"/>
 
     <!--<ProgressBar
         android:id="@+id/stepsProgress"
