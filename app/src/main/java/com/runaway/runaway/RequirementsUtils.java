@@ -28,7 +28,7 @@ public class RequirementsUtils {
 
     public static boolean isGPSOn(Context context){
         LocationManager locationManager=(LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) && locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
     }
 
     public static boolean isPermissionsMissing(Context context,String... permissions){

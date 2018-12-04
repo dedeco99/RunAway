@@ -74,6 +74,7 @@ public class MapFragment extends Fragment implements AdapterView.OnItemSelectedL
         initializeLocationManager();
         initializeMap();
 
+        //if(location==null)Toast.makeText(getContext(), "location null", Toast.LENGTH_LONG).show();
         //Gui setup
         Spinner spinner = view.findViewById(R.id.maps_spinner);
         final ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item);
@@ -97,10 +98,10 @@ public class MapFragment extends Fragment implements AdapterView.OnItemSelectedL
 
     private void initializeLocationManager() {
         //Better safe than broken
-        if (locationManager != null &&
-                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+        if (    ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED) {
+                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) {
 
             locationManager = (LocationManager) getContext().getSystemService(Context.LOCATION_SERVICE);
         }
@@ -110,7 +111,9 @@ public class MapFragment extends Fragment implements AdapterView.OnItemSelectedL
     public void onMapReady(GoogleMap googleMap) {
         if (    ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED) {
+                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED) {
+
             map = googleMap;
             drawMyMarker();
         }
@@ -120,7 +123,7 @@ public class MapFragment extends Fragment implements AdapterView.OnItemSelectedL
     private void updateMyLocation() {
         location=getCurrentLocation();
         if(location==null){
-            Toast.makeText(getContext(), getString(R.string.no_location_found), Toast.LENGTH_LONG).show();
+
         }
     }
 
@@ -148,7 +151,7 @@ public class MapFragment extends Fragment implements AdapterView.OnItemSelectedL
     public void drawMyMarker(){
         updateMyLocation();
         if(location==null){
-            Toast.makeText(getContext(), getString(R.string.no_location_found), Toast.LENGTH_LONG).show();
+
         }else{
             LatLng gps = new LatLng(location.getLatitude(), location.getLongitude());
             map.addMarker(new MarkerOptions().position(gps).title(getString(R.string.current_position)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
@@ -173,11 +176,10 @@ public class MapFragment extends Fragment implements AdapterView.OnItemSelectedL
 
     private Location getCurrentLocation() {
         Location bestLocation = null;
-        if (locationManager != null &&
-                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+        if (    ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                 ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
-                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED) {
-
+                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_NETWORK_STATE) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(getContext(), Manifest.permission.INTERNET) == PackageManager.PERMISSION_GRANTED){
             List<String> providers = locationManager.getProviders(true);
 
             for (String provider : providers) {
