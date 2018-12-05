@@ -17,6 +17,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -83,13 +84,17 @@ public class StatsAddGoalActivity extends AppCompatActivity implements RequestPo
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String user = sharedPref.getString("user","nope");
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH)+1;
+        int year = calendar.get(Calendar.YEAR);
 
         try {
             jsonBody.put("user",user);
             jsonBody.put("goalType", goalTypeValue.getSelectedItem().toString());
             jsonBody.put("value", Integer.parseInt(goalValue.getText().toString()));
             jsonBody.put("frequency", frequencyValue.getSelectedItem().toString());
-            jsonBody.put("created",new Date());
+            jsonBody.put("created", String.format("%02d/%02d/%02d", day, month, year));
         } catch (JSONException e) {
             e.printStackTrace();
         }

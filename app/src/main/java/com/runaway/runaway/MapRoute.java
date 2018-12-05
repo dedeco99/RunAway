@@ -6,23 +6,20 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 
-public class Route {
+public class MapRoute {
     public static final int ROUTE_WIDTH=8;
     public static final int ROUTE_COLOR=Color.BLUE;
     private String routeName;
     private ArrayList<LatLng> dots;
 
-    public Route(){
+    public MapRoute(){
         this.routeName="Default";
         this.dots=new ArrayList<>();
     }
 
-    public Route(String routeName,LatLng... dots){
+    public MapRoute(String routeName, ArrayList<LatLng> dots){
         this.routeName=routeName;
-        this.dots=new ArrayList<>();
-        for(LatLng dot:dots){
-            this.dots.add(dot);
-        }
+        this.dots = dots;
     }
 
 

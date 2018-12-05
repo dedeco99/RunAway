@@ -1,5 +1,6 @@
 package com.runaway.runaway;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class MealsAddFoodActivity extends AppCompatActivity implements RequestPostHandler{
@@ -43,18 +45,23 @@ public class MealsAddFoodActivity extends AppCompatActivity implements RequestPo
         addFoodButton.setOnClickListener(v -> addFood());
     }
 
+    @SuppressLint("DefaultLocale")
     private void addFood(){
         String url = "https://api.mlab.com/api/1/databases/runaway/collections/foods?apiKey=gMqDeofsYMBMCO6RJBydS59weP9OCJZf";
         JSONObject jsonBody = new JSONObject();
 
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         String user = sharedPref.getString("user","nope");
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        int month = calendar.get(Calendar.MONTH)+1;
+        int year = calendar.get(Calendar.YEAR);
 
         try {
             jsonBody.put("user",user);
             jsonBody.put("name", nameValue.getText());
             jsonBody.put("calories", Integer.parseInt(caloriesValue.getText().toString()));
-            jsonBody.put("created",new Date());
+            jsonBody.put("created", String.format("%02d/%02d/%02d", day, month, year));
         } catch (JSONException e) {
             e.printStackTrace();
         }
