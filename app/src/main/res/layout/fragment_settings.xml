@@ -1,58 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-
-        <!-- android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" /> -->
+    android:layout_height="match_parent"
+    android:layout_centerVertical="true"
+    android:background="@drawable/shadow_box"
+    android:elevation="8dp"
+    android:layout_margin="15dp"
+    android:padding="15dp">
 
     <Button
         android:id="@+id/changeEmailPassButton"
-        android:layout_width="256dp"
-        android:layout_height="64dp"
-        android:layout_alignParentBottom="true"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="477dp"
-        android:backgroundTint="@color/colorPrimary"
+        android:layout_above="@+id/changeThemeButton"
         android:text="@string/change_email_password"
-        android:onClick="changeEmailPassword"
-        android:textColor="@color/colorAccent" />
+        android:textColor="@color/colorAccent"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_marginBottom="20dp" />
 
     <Button
         android:id="@+id/changeThemeButton"
-        android:layout_width="256dp"
-        android:layout_height="64dp"
-        android:layout_alignParentBottom="true"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="384dp"
-        android:backgroundTint="@color/colorPrimary"
+        android:layout_centerVertical="true"
         android:text="@string/change_theme"
-        android:onClick="changeTheme"
-        android:textColor="@color/colorAccent" />
+        android:textColor="@color/colorAccent"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_marginBottom="20dp" />
 
     <Button
         android:id="@+id/logoutButton"
-        android:layout_width="192dp"
-        android:layout_height="64dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="128dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:onClick="logout"
-        android:text="@string/logout"
-        android:textColor="@color/colorAccent" />
-
-    <android.support.v7.widget.SwitchCompat
-        android:id="@+id/notificationsSwitch"
-        android:layout_width="match_parent"
+        android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginEnd="0dp"
-        android:layout_marginBottom="214dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:padding="64dp"
-        android:text="@string/notifications"
-        android:theme="@style/BlueSwitch" />
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/changeThemeButton"
+        android:text="@string/logout"
+        android:textColor="@color/colorAccent"
+        android:backgroundTint="@color/colorPrimary" />
 
 </RelativeLayout>

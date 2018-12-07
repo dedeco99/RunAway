@@ -48,6 +48,7 @@
         <activity android:name=".MealsAddActivity" />
         <activity android:name=".MealsAddFoodActivity" />
         <activity android:name=".StatsAddGoalActivity" />
+        <activity android:name=".SettingsChangePassword" />
     </application>
 
 </manifest>
