@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 public class SettingsFragment extends Fragment {
     private Button changeEmailPasswordButton;
-    private Button changeThemeButton;
+    private SwitchCompat themeSwitch;
     private Button logoutButton;
 
     @Nullable
@@ -26,7 +26,7 @@ public class SettingsFragment extends Fragment {
         View view=inflater.inflate(R.layout.fragment_settings,container, false);
 
         changeEmailPasswordButton=view.findViewById(R.id.changeEmailPassButton);
-        changeThemeButton=view.findViewById(R.id.changeThemeButton);
+        themeSwitch=view.findViewById(R.id.themeSwitch);
         logoutButton=view.findViewById(R.id.logoutButton);
 
         handleButtons();
@@ -40,9 +40,7 @@ public class SettingsFragment extends Fragment {
             startActivity(intent);
         });
 
-        changeThemeButton.setOnClickListener((View v)->{
-
-        });
+        themeSwitch.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked)->toggleNotifications(buttonView,isChecked));
 
         logoutButton.setOnClickListener((View v)->{
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -53,6 +51,14 @@ public class SettingsFragment extends Fragment {
             Intent intent = new Intent(getContext(), SplashActivity.class);
             startActivity(intent);
         });
+    }
+
+    public void toggleNotifications(View view,boolean state){
+        if(state){
+            Toast.makeText(getContext(),"Dark Mode",Toast.LENGTH_LONG).show();
+        }else {
+            Toast.makeText(getContext(),"Light Mode",Toast.LENGTH_LONG).show();
+        }
     }
 
 }

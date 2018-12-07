@@ -1,6 +1,5 @@
 package com.runaway.runaway;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -12,14 +11,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class SettingsChangePassword extends AppCompatActivity implements RequestPutHandler{
-    private TextView passwordValue;
+public class SettingsChangePassword extends AppCompatActivity implements RequestGetHandler, RequestPutHandler{
+    private TextView passwordOldValue;
+    private TextView passwordNewValue;
     private Button changePasswordButton;
 
     @Override
@@ -33,27 +34,53 @@ public class SettingsChangePassword extends AppCompatActivity implements Request
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
 
-        passwordValue = findViewById(R.id.passwordValue);
+        passwordOldValue = findViewById(R.id.passwordOldValue);
+        passwordNewValue = findViewById(R.id.passwordNewValue);
         changePasswordButton = findViewById(R.id.changePasswordButton);
 
         handleButtons();
     }
 
     private void handleButtons(){
-        changePasswordButton.setOnClickListener(v -> changePassword());
+        changePasswordButton.setOnClickListener(v -> checkPassword());
     }
 
-    @SuppressLint("DefaultLocale")
-    private void changePassword(){
+    private void checkPassword(){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        String user = sharedPref.getString("user","nope");
+        String user = sharedPref.getString("user", "nope");
 
-        String passwordHash = hashPassword();
+        String url = "https://api.mlab.com/api/1/databases/runaway/collections/users?q={'email':'"+user+"'}&apiKey=gMqDeofsYMBMCO6RJBydS59weP9OCJZf";
+        RequestGetHandler requestGetHandler = this;
+        RequestSingleton.getInstance().getRequest(url, requestGetHandler, getApplicationContext());
+    }
 
+    @Override
+    public void handleGetRequest(JSONArray response) {
+        for(int i=0;i<response.length();i++){
+            try {
+                String name = response.getJSONObject(i).getString("name");
+                String email = response.getJSONObject(i).getString("email");
+                String currentPassword = response.getJSONObject(i).getString("password");
+                String passwordOld = hashPassword(passwordOldValue.getText().toString());
+                String passwordNew = hashPassword(passwordNewValue.getText().toString());
+
+                if(currentPassword.equalsIgnoreCase(passwordOld)){
+                    changePassword(name,email,passwordNew);
+                }else{
+                    Toast.makeText(getApplicationContext(), "Error: Password is wrong", Toast.LENGTH_SHORT).show();
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void changePassword(String name, String user, String passwordHash){
         String url = "https://api.mlab.com/api/1/databases/runaway/collections/users?q={'email':'"+user+"'}&apiKey=gMqDeofsYMBMCO6RJBydS59weP9OCJZf";
         JSONObject jsonBody = new JSONObject();
 
         try {
+            jsonBody.put("name", name);
             jsonBody.put("email", user);
             jsonBody.put("password", passwordHash);
         } catch (JSONException e) {
@@ -72,8 +99,7 @@ public class SettingsChangePassword extends AppCompatActivity implements Request
         finish();
     }
 
-    private String hashPassword(){
-        String password = passwordValue.getText().toString();
+    private String hashPassword(String password){
         MessageDigest messageDigest;
 
         try {

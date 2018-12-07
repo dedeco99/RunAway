@@ -63,8 +63,10 @@
 
     <string name="title_settings">Settings</string>
     <string name="title_full_settings">Settings</string>
-    <string name="title_change_password">Change Password</string>
 
+    <string name="title_change_password">Change Password</string>
+    <string name="change_password_old">Old Password</string>
+    <string name="change_password_new">New Password</string>
 
 
     <string name="spinner_routes">Routes</string>
@@ -92,7 +94,6 @@
     <string name="gps_reload">Reload after turing gps on</string>
     <string name="reload">Reload</string>
     <string name="change_email_password">Change Email/Password</string>
-    <string name="change_theme">Change Theme</string>
-    <string name="notifications">Notifications</string>
+    <string name="change_theme">Dark Mode</string>
     <string name="logout">Logout</string>
 </resources>
