@@ -125,7 +125,6 @@ public class StatsStatFragment extends Fragment implements RequestGetHandler{
     private void getGoals(){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String user = sharedPref.getString("user", "nope");
-        System.out.println("Goals"+statString);
 
         String url = "https://api.mlab.com/api/1/databases/runaway/collections/goals?q={'user':'"+user+"','goalType':'"+statString+"','frequency':'"+frequency+"'}&apiKey=gMqDeofsYMBMCO6RJBydS59weP9OCJZf";
         RequestGetHandler requestGetHandler = this;
@@ -135,7 +134,6 @@ public class StatsStatFragment extends Fragment implements RequestGetHandler{
     private void getStats(){
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String user = sharedPref.getString("user", "nope");
-        System.out.println("Stats"+statString);
 
         String url = "https://api.mlab.com/api/1/databases/runaway/collections/tracks?q={'user':'"+user+"'}&apiKey=gMqDeofsYMBMCO6RJBydS59weP9OCJZf";
         RequestGetHandler requestGetHandler = this;
@@ -144,7 +142,6 @@ public class StatsStatFragment extends Fragment implements RequestGetHandler{
 
     @Override
     public void handleGetRequest(JSONArray response) {
-        System.out.println(response);
         if(response.length()>0) {
             try {
                 if (response.getJSONObject(0).has("goalType")) {
@@ -198,9 +195,21 @@ public class StatsStatFragment extends Fragment implements RequestGetHandler{
                     int daysDiff = getDaysDifference(date);
 
                     if (daysDiff == i) {
-                        int stat = response.getJSONObject(j).getInt(statString.toLowerCase());
-                        totalStat += stat;
-                        totalTotalStat += stat;
+                        if(statString.equals("Time")){
+                            String time = response.getJSONObject(j).getString(statString.toLowerCase());
+
+                            int hours = Integer.parseInt(time.subSequence(0,2).toString());
+                            int minutes = Integer.parseInt(time.subSequence(3,5).toString());
+                            minutes += hours*60;
+
+                            totalStat += minutes;
+                            totalTotalStat += minutes;
+                        }else {
+                            int stat = response.getJSONObject(j).getInt(statString.toLowerCase());
+                            totalStat += stat;
+                            totalTotalStat += stat;
+                        }
+
                         if (totalStat > maxStat) maxStat = totalStat;
                     }
                 } catch (JSONException e) {
@@ -261,5 +270,12 @@ public class StatsStatFragment extends Fragment implements RequestGetHandler{
         }
 
         return calendar;
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        getStats();
     }
 }

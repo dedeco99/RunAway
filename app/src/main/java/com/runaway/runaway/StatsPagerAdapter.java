@@ -23,11 +23,11 @@ public class StatsPagerAdapter extends FragmentPagerAdapter {
             args.putString("stat", "Distance");
             args.putString("unit", "meters");
         } else if (position == 1){
-            args.putString("stat", "Speed");
-            args.putString("unit", "min/Km");
-        } else {
             args.putString("stat", "Steps");
             args.putString("unit", "steps");
+        } else {
+            args.putString("stat", "Time");
+            args.putString("unit", "minutes");
         }
 
         fragment.setArguments(args);
@@ -36,7 +36,7 @@ public class StatsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 4;
+        return 3;
     }
 
     @Override
@@ -45,9 +45,9 @@ public class StatsPagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return mContext.getString(R.string.title_stats_distance);
             case 1:
-                return mContext.getString(R.string.title_stats_speed);
-            case 2:
                 return mContext.getString(R.string.title_stats_steps);
+            case 2:
+                return mContext.getString(R.string.title_stats_time);
             default:
                 return null;
         }

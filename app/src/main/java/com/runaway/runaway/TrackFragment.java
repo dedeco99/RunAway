@@ -183,7 +183,7 @@ public class TrackFragment extends Fragment implements RequestPostHandler {
 
                 int minutes = ((int) (currentTime / 1000)) / 60;
                 double speed = minutes / distance;
-                String speedString = format.format(speed);
+                String speedString = format.format(speed).replace(",", ".");
                 speedValue.setText(speedString);
             }
         };
@@ -241,7 +241,7 @@ public class TrackFragment extends Fragment implements RequestPostHandler {
             jsonBody.put("distance", distance);
             jsonBody.put("altitude", Double.parseDouble(altitudeValue.getText().toString()));
             jsonBody.put("steps", Integer.parseInt(stepsValue.getText().toString()));
-            jsonBody.put("speed", Integer.parseInt(speedValue.getText().toString()));
+            jsonBody.put("speed", Double.parseDouble(speedValue.getText().toString()));
             jsonBody.put("created",String.format("%02d/%02d/%02d", day, month, year));
         } catch (JSONException e) {
             e.printStackTrace();
