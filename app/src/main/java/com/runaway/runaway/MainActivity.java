@@ -1,8 +1,10 @@
 package com.runaway.runaway;
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -18,6 +20,8 @@ import com.google.android.gms.common.GoogleApiAvailability;
 public class MainActivity extends AppCompatActivity {
     private static final int GOOGLE_SERVICES_ERROR_REQUEST = 9001;
     private Toolbar toolbar;
+    private static MainActivity instance;
+    private boolean darkMode;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -48,13 +52,16 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         }
-
     };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        instance=this;
+        SharedPreferences preferences=PreferenceManager.getDefaultSharedPreferences(this);
+        darkMode=preferences.getBoolean("DARK_MODE",false);
 
         toolbar = findViewById(R.id.toolbar);
         toolbar.setLogo(R.drawable.logo2small);
@@ -96,17 +103,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public boolean isGoogleServicesUpdated() {
-        int updated = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(MainActivity.this);
-
-        if (updated == ConnectionResult.SUCCESS) {
-            return true;
-        } else if (GoogleApiAvailability.getInstance().isUserResolvableError(updated)) {
-            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(MainActivity.this, updated, GOOGLE_SERVICES_ERROR_REQUEST);
-            dialog.show();
-        } else {
-            Toast.makeText(this, "Can´t make map requests", Toast.LENGTH_SHORT).show();
-        }
-        return false;
+    public static MainActivity getInstance(){
+        return instance;
     }
+
+
 }

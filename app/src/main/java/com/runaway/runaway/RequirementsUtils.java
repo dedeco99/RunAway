@@ -1,6 +1,7 @@
 package com.runaway.runaway;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,6 +18,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.widget.Toast;
+
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+
 import java.util.Stack;
 
 public class RequirementsUtils {
@@ -101,5 +107,19 @@ public class RequirementsUtils {
         });
 
         return reloadView;
+    }
+
+    public boolean isGoogleServicesUpdated(Activity activity) {
+        int updated = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(activity);
+
+        if (updated == ConnectionResult.SUCCESS) {
+            return true;
+        } else if (GoogleApiAvailability.getInstance().isUserResolvableError(updated)) {
+            Dialog dialog = GoogleApiAvailability.getInstance().getErrorDialog(activity, updated, 9001);
+            dialog.show();
+        } else {
+            Toast.makeText(activity, "Can´t make map requests", Toast.LENGTH_SHORT).show();
+        }
+        return false;
     }
 }
