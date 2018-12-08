@@ -14,10 +14,21 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/themeSwitch"
+        android:layout_above="@+id/dynamicSwitch"
         android:text="@string/change_email_password"
         android:textColor="@color/colorAccent"
         android:backgroundTint="@color/colorPrimary"
+        android:layout_marginBottom="20dp" />
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/dynamicSwitch"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/themeSwitch"
+        android:backgroundTint="@color/colorPrimary"
+        android:text="@string/change_dynamic"
+        android:theme="@style/BlueSwitch"
         android:layout_marginBottom="20dp" />
 
     <android.support.v7.widget.SwitchCompat

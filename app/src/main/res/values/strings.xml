@@ -94,6 +94,7 @@
     <string name="gps_reload">Reload after turing gps on</string>
     <string name="reload">Reload</string>
     <string name="change_email_password">Change Email/Password</string>
+    <string name="change_dynamic">Dynamic Mode</string>
     <string name="change_theme">Dark Mode</string>
     <string name="logout">Logout</string>
 </resources>

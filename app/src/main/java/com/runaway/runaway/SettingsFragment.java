@@ -15,23 +15,26 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 public class SettingsFragment extends Fragment implements  IChangeableTheme{
     private Button changeEmailPasswordButton;
+    private SwitchCompat dynamicSwitch;
     private SwitchCompat themeSwitch;
     private Button logoutButton;
+
+    private boolean dynamicMode;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_settings,container, false);
 
+        SharedPreferences preferences=PreferenceManager.getDefaultSharedPreferences(getContext());
+        dynamicMode=preferences.getBoolean("DYNAMIC_MODE",false);
 
         changeEmailPasswordButton=view.findViewById(R.id.changeEmailPassButton);
+        dynamicSwitch=view.findViewById(R.id.dynamicSwitch);
         themeSwitch=view.findViewById(R.id.themeSwitch);
         logoutButton=view.findViewById(R.id.logoutButton);
         setSelectedTheme(view);
@@ -47,7 +50,10 @@ public class SettingsFragment extends Fragment implements  IChangeableTheme{
         });
 
         themeSwitch.setChecked(MainActivity.getInstance().isDarkModeEnabled());
-        themeSwitch.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked)->toggleNotifications(buttonView,isChecked));
+        themeSwitch.setOnCheckedChangeListener(this::toggleDarkMode);
+
+        dynamicSwitch.setChecked(dynamicMode);
+        dynamicSwitch.setOnCheckedChangeListener(this::toggleDynamicMode);
 
         logoutButton.setOnClickListener((View v)->{
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -60,7 +66,7 @@ public class SettingsFragment extends Fragment implements  IChangeableTheme{
         });
     }
 
-    public void toggleNotifications(View view,boolean state){
+    public void toggleDarkMode(View view,boolean state){
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
@@ -75,6 +81,23 @@ public class SettingsFragment extends Fragment implements  IChangeableTheme{
         editor.apply();
         Intent intent = new Intent(getContext(), SplashActivity.class);
         startActivity(intent);
+        getActivity().finish();
+    }
+
+    public void toggleDynamicMode(View view,boolean state){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        if(state){
+            editor.putBoolean("DYNAMIC_MODE",true);
+        }else {
+            editor.putBoolean("DYNAMIC_MODE",false);
+        }
+
+        editor.apply();
+        Intent intent = new Intent(getContext(), SplashActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 
     @Override
@@ -84,8 +107,6 @@ public class SettingsFragment extends Fragment implements  IChangeableTheme{
             Drawable drawable=rl.getBackground().getCurrent();
             drawable.setColorFilter(Color.parseColor("#33343B"),PorterDuff.Mode.MULTIPLY);
             themeSwitch.setTextColor(Color.parseColor("#cccccc"));
-        }else{
-
         }
     }
 }
