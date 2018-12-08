@@ -5,6 +5,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -22,6 +25,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +38,7 @@ import java.util.List;
 
 import static android.content.Context.SENSOR_SERVICE;
 
-public class TrackFragment extends Fragment implements RequestPostHandler {
+public class TrackFragment extends Fragment implements RequestPostHandler,IChangeableTheme {
     private Context context;
     private TextView timeValue;
     private TextView distanceValue;
@@ -64,7 +68,7 @@ public class TrackFragment extends Fragment implements RequestPostHandler {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_track, null);
         context = this.getContext();
-
+        setSelectedTheme(view);
         if (context != null) {
             locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         }
@@ -271,5 +275,16 @@ public class TrackFragment extends Fragment implements RequestPostHandler {
         trackButton.setBackgroundTintList(context.getResources().getColorStateList(R.color.colorPrimary));
         trackButton.setImageResource(android.R.drawable.ic_media_play);
         saveButton.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void setSelectedTheme(@Nullable View view) {
+        if(MainActivity.getInstance().isDarkModeEnabled()){
+        LinearLayout ll=view.findViewById(R.id.shadowboxLinearLayout);
+        Drawable drawable=ll.getBackground().getCurrent();
+        drawable.setColorFilter(Color.parseColor("#33343B"),PorterDuff.Mode.MULTIPLY);
+        }else{
+
+        }
     }
 }

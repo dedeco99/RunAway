@@ -8,6 +8,7 @@
     android:weightSum="2">
 
     <LinearLayout
+        android:id="@+id/shadowboxLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"

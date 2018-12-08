@@ -9,11 +9,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.jetbrains.annotations.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-public class MealsAddActivity extends AppCompatActivity implements RequestGetHandler,RequestPostHandler {
+public class MealsAddActivity extends AppCompatActivity implements RequestGetHandler,RequestPostHandler,IChangeableTheme {
     private Spinner foodValue;
     private Spinner mealTimeValue;
     private Button addMealButton;
@@ -31,6 +33,8 @@ public class MealsAddActivity extends AppCompatActivity implements RequestGetHan
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setSelectedTheme(null);
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_add);
 
@@ -156,5 +160,14 @@ public class MealsAddActivity extends AppCompatActivity implements RequestGetHan
         super.onResume();
 
         handleSpinners();
+    }
+
+    @Override
+    public void setSelectedTheme(@Nullable View view) {
+        if(MainActivity.getInstance().isDarkModeEnabled()){
+            setTheme(R.style.AppTheme_Dark);
+        }else{
+            setTheme(R.style.AppTheme);
+        }
     }
 }

@@ -1,6 +1,5 @@
 package com.runaway.runaway;
 
-import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -12,13 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
+import android.view.View;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-
-public class MainActivity extends AppCompatActivity {
-    private static final int GOOGLE_SERVICES_ERROR_REQUEST = 9001;
+public class MainActivity extends AppCompatActivity implements IChangeableTheme {
     private Toolbar toolbar;
     private static MainActivity instance;
     private boolean darkMode;
@@ -56,12 +51,15 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        instance=this;
         SharedPreferences preferences=PreferenceManager.getDefaultSharedPreferences(this);
-        darkMode=preferences.getBoolean("DARK_MODE",false);
+        this.darkMode=preferences.getBoolean("DARK_MODE",false);
+        setSelectedTheme(null);
+
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);
+        instance=this;
 
         toolbar = findViewById(R.id.toolbar);
         toolbar.setLogo(R.drawable.logo2small);
@@ -73,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_track);
+
+
     }
 
     // create an action bar button
@@ -107,5 +107,16 @@ public class MainActivity extends AppCompatActivity {
         return instance;
     }
 
+    public boolean isDarkModeEnabled(){
+        return darkMode;
+    }
 
+    public void setDarkModeEnabled(boolean state){
+        darkMode=state;
+    }
+
+    @Override
+    public void setSelectedTheme(View view) {
+        setTheme(isDarkModeEnabled() ? R.style.AppTheme_Dark : R.style.AppTheme);
+    }
 }
